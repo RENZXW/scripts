@@ -23,6 +23,15 @@
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             position: relative;
             z-index: 1;
+            display: block;
+        }
+        .script-section.hidden {
+            display: none;
+        }
+        .script-section.expanded {
+            max-width: 60%;
+            margin: 0 auto;
+            padding: 20px;
         }
         .script-section:hover {
             transform: translateY(-5px);
@@ -69,7 +78,6 @@
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
-            cursor: pointer;
         }
         .get-script-btn:hover {
             background-color: #0056b3;
@@ -94,18 +102,6 @@
         .get-script-btn:active::after {
             animation: ripple 0.6s ease-out;
         }
-        .expanded {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: white;
-            z-index: 1000;
-            overflow: auto;
-            padding: 20px;
-            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-        }
     </style>
 </head>
 <body>
@@ -115,7 +111,7 @@
         <div class="video-container">
             <iframe width="560" height="315" src="https://www.youtube.com/embed/SrSuzTxhIqk?si=5X8otWXtptp6xX7M" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
         </div>
-        <a href="#renzxw" class="get-script-btn" onclick="expandOrRedirect(event, 'renzxw', 'https://rekonise.com/renzxw-camlock-oen3d')">GET SCRIPT HERE</a>
+        <a href="#renzxw" class="get-script-btn" onclick="expandSection('renzxw', 'https://rekonise.com/renzxw-camlock-oen3d')">GET SCRIPT HERE</a>
     </div>
 
     <div id="sanderx" class="script-section">
@@ -124,7 +120,7 @@
         <div class="video-container">
             <iframe width="560" height="315" src="https://www.youtube.com/embed/0HJ3XIQ-JTA?si=xRM4cY3DiARb1_6S" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
         </div>
-        <a href="#sanderx" class="get-script-btn" onclick="expandOrRedirect(event, 'sanderx', 'https://linkvertise.com/1205108/sander-x-brookhaven-hack')">GET SCRIPT HERE</a>
+        <a href="#sanderx" class="get-script-btn" onclick="expandSection('sanderx', 'https://linkvertise.com/1205108/sander-x-brookhaven-hack')">GET SCRIPT HERE</a>
     </div>
 
     <div id="symphony" class="script-section">
@@ -133,7 +129,7 @@
         <div class="video-container">
             <iframe width="560" height="315" src="https://www.youtube.com/embed/UTP3JKthFhg?si=k3Zb7y6mRvroM4Z9" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
         </div>
-        <a href="#symphony" class="get-script-btn" onclick="expandOrRedirect(event, 'symphony', 'https://example.com/script3')">GET SCRIPT HERE</a>
+        <a href="#symphony" class="get-script-btn" onclick="expandSection('symphony', 'https://example.com/script3')">GET SCRIPT HERE</a>
     </div>
 
     <div id="redz" class="script-section">
@@ -142,107 +138,33 @@
         <div class="video-container">
             <iframe width="560" height="315" src="https://www.youtube.com/embed/zeYmj7_ukUk?si=I9mCcqciaISWjHel" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
         </div>
-        <a href="#redz" class="get-script-btn" onclick="expandOrRedirect(event, 'redz', 'https://example.com/script4')">GET SCRIPT HERE</a>
+        <a href="#redz" class="get-script-btn" onclick="expandSection('redz', 'https://example.com/script3')">GET SCRIPT HERE</a>
     </div>
 
     <script>
-        // Variable to track the number of clicks
-        var clickCounts = {};
+        let clickCounts = {};
 
-        function expandOrRedirect(event, id, link) {
-            // Initialize click count for this section if not already done
-            if (!clickCounts[id]) {
-                clickCounts[id] = 0;
-            }
-
-            // Increment the click count
+        function expandSection(id, link) {
+            if (!clickCounts[id]) clickCounts[id] = 0;
             clickCounts[id]++;
 
-            // If it's the first click, expand the section
             if (clickCounts[id] === 1) {
+                // Hide all other sections
                 document.querySelectorAll('.script-section').forEach(section => {
-                    section.classList.remove('expanded');
+                    if (section.id !== id) {
+                        section.classList.add('hidden');
+                    } else {
+                        section.classList.add('expanded');
+                    }
                 });
-
-                var selectedSection = document.getElementById(id);
-                selectedSection.classList.add('expanded');
-            } 
-            // If it's the second click, redirect to the link
-            else if (clickCounts[id] === 2) {
+                
+                // Scroll to the expanded section
+                window.location.href = `#${id}`;
+            } else if (clickCounts[id] === 2) {
+                // Redirect to the provided link
                 window.location.href = link;
             }
         }
     </script>
-    <div class="menu-btn" onclick="toggleMenu()">
-    <div></div>
-    <div></div>
-    <div></div>
-</div>
-
-<div class="menu" id="menu">
-    <a href="/home">Home</a>
-    <a href="/scripts">Scripts</a>
-    <a href="/support-Me">Support me</a>
-</div>
-
-<style>
-    .menu-btn {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        cursor: pointer;
-        z-index: 1001;
-        background-color: rgba(255, 255, 255, 0.7);
-        padding: 10px;
-        border-radius: 5px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        width: 30px;
-        height: 21px;
-    }
-
-    .menu-btn div {
-        width: 100%;
-        height: 3px;
-        background-color: #333;
-        transition: all 0.3s ease;
-    }
-
-    .menu {
-        position: fixed;
-        top: 0;
-        right: -250px;
-        width: 250px;
-        height: 100%;
-        background-color: #333;
-        padding-top: 60px;
-        transition: 0.3s;
-        z-index: 1000;
-    }
-
-    .menu.active {
-        right: 0;
-    }
-
-    .menu a {
-        padding: 15px 25px;
-        text-decoration: none;
-        font-size: 18px;
-        color: #fff;
-        display: block;
-        transition: 0.3s;
-    }
-
-    .menu a:hover {
-        background-color: #444;
-    }
-</style>
-
-<script>
-    function toggleMenu() {
-        document.getElementById("menu").classList.toggle("active");
-    }
-</script>
 </body>
 </html>

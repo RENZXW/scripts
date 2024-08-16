@@ -23,7 +23,6 @@
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             position: relative;
             z-index: 1;
-            display: block;
         }
         .script-section.hidden {
             display: none;
@@ -102,9 +101,119 @@
         .get-script-btn:active::after {
             animation: ripple 0.6s ease-out;
         }
+
+        /* Styles for the menu and toggle button */
+        .menu-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            cursor: pointer;
+            z-index: 1001;
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 10px;
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 21px;
+        }
+
+        .menu-btn div {
+            width: 100%;
+            height: 3px;
+            background-color: #333;
+            transition: all 0.3s ease;
+        }
+
+        .menu {
+            position: fixed;
+            top: 0;
+            right: -250px;
+            width: 250px;
+            height: 100%;
+            background-color: #333;
+            padding-top: 60px;
+            transition: 0.3s;
+            z-index: 1000;
+        }
+
+        .menu.active {
+            right: 0;
+        }
+
+        .menu a {
+            padding: 15px 25px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #fff;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .menu a:hover {
+            background-color: #444;
+        }
+
+        /* Styles for the search box and button */
+        .search-container {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-box {
+            padding: 10px;
+            border-radius: 25px;
+            border: 2px solid #007bff;
+            font-size: 16px;
+            width: 200px;
+            outline: none;
+        }
+
+        .search-btn {
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-left: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .search-btn:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
     </style>
 </head>
 <body>
+    <!-- MENU TOGGLE BUTTON -->
+    <div class="menu-btn" onclick="toggleMenu()">
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+
+    <!-- SEARCH BOX AND BUTTON -->
+    <div class="search-container">
+        <input type="text" class="search-box" placeholder="Search scripts...">
+        <button class="search-btn" onclick="searchScripts()">Search</button>
+    </div>
+
+    <!-- MENU -->
+    <div class="menu" id="menu">
+        <a href="/home">Home</a>
+        <a href="/scripts">Scripts</a>
+        <a href="/thanks-donation">Support me</a>
+        <a href="/donation">Donate</a>
+    </div>
+
     <!-- SCRIPTS SECTIONS -->
     <div id="renzxw" class="script-section">
         <h2>RenzXW LOCK</h2>
@@ -130,7 +239,7 @@
             <iframe width="560" height="315" src="https://www.youtube.com/embed/UTP3JKthFhg?si=k3Zb7y6mRvroM4Z9" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
         </div>
         <a href="#symphony" class="get-script-btn" onclick="expandSection('symphony', 'https://example.com/script3')">GET SCRIPT HERE</a>
-    </div>
+        </div>
 
     <div id="redz" class="script-section">
         <h2>REDz HUB</h2>
@@ -138,32 +247,44 @@
         <div class="video-container">
             <iframe width="560" height="315" src="https://www.youtube.com/embed/zeYmj7_ukUk?si=I9mCcqciaISWjHel" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
         </div>
-        <a href="#redz" class="get-script-btn" onclick="expandSection('redz', 'https://example.com/script3')">GET SCRIPT HERE</a>
+        <a href="#redz" class="get-script-btn" onclick="expandSection('redz', 'https://example.com/script4')">GET SCRIPT HERE</a>
     </div>
 
+    <!-- Additional script sections can be added below as needed -->
+
     <script>
-        let clickCounts = {};
+        // Toggle Menu Function
+        function toggleMenu() {
+            document.getElementById("menu").classList.toggle("active");
+        }
 
-        function expandSection(id, link) {
-            if (!clickCounts[id]) clickCounts[id] = 0;
-            clickCounts[id]++;
+        // Function to expand the section and redirect
+        function expandSection(sectionId, url) {
+            const section = document.getElementById(sectionId);
+            section.classList.toggle("expanded");
 
-            if (clickCounts[id] === 1) {
-                // Hide all other sections
-                document.querySelectorAll('.script-section').forEach(section => {
-                    if (section.id !== id) {
-                        section.classList.add('hidden');
-                    } else {
-                        section.classList.add('expanded');
-                    }
-                });
-                
-                // Scroll to the expanded section
-                window.location.href = `#${id}`;
-            } else if (clickCounts[id] === 2) {
-                // Redirect to the provided link
-                window.location.href = link;
+            if (section.classList.contains("expanded")) {
+                setTimeout(() => {
+                    window.location.href = url;
+                }, 1000); // Wait 1 second before redirecting
             }
+        }
+
+        // Function to handle the search functionality
+        function searchScripts() {
+            const query = document.querySelector('.search-box').value.toLowerCase();
+            const scriptSections = document.querySelectorAll('.script-section');
+
+            scriptSections.forEach(section => {
+                const title = section.querySelector('h2').textContent.toLowerCase();
+                const subtitle = section.querySelector('h3') ? section.querySelector('h3').textContent.toLowerCase() : '';
+
+                if (title.includes(query) || subtitle.includes(query)) {
+                    section.style.display = 'block';
+                } else {
+                    section.style.display = 'none';
+                }
+            });
         }
     </script>
 </body>
